@@ -7,7 +7,11 @@ package it.polito.tdp.imdb;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
 import it.polito.tdp.imdb.model.Model;
+import it.polito.tdp.imdb.model.Movie;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,6 +22,7 @@ import javafx.scene.control.TextField;
 public class FXMLController {
 
 	Model model;
+	Graph<Movie, DefaultWeightedEdge> graph;
 	
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -50,12 +55,25 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	txtResult.clear();
+    	String rankTxt = this.txtRank.getText();
+    	double rank = 0.0;
+    	
+    	try {
+    		rank = Double.parseDouble(rankTxt);
+    		this.graph = this.model.creaGrafo(rank);
+    		
+    		txtResult.appendText("#VERTICI: "+this.graph.vertexSet().size()+"\n"+"#ARCHI: "+this.graph.edgeSet().size()+"\n");
+    		    	
+    	}catch (NumberFormatException e) {
+			txtResult.appendText("formato numerico non corretto");
+		}
     	
     }
 
     @FXML
     void doGradoMax(ActionEvent event) {
-    	
+    	txtResult.appendText("Film di grado massimo: "+this.model.getMassimoMovie()+"\n"+ this.model.getMassimoInt());
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

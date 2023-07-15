@@ -84,6 +84,55 @@ public class ImdbDAO {
 		}
 	}
 	
+	public List<Movie> listAllMoviesWithRank(){
+		String sql = "SELECT DISTINCT m.* "
+				+ "FROM movies m "
+				+ "WHERE m.`rank` IS NOT NULL ";
+		List<Movie> result = new ArrayList<Movie>();
+		Connection conn = DBConnect.getConnection();
+
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			ResultSet res = st.executeQuery();
+			while (res.next()) {
+
+				Movie movie = new Movie(res.getInt("id"), res.getString("name"), 
+						res.getInt("year"), res.getDouble("rank"));
+				
+				result.add(movie);
+			}
+			conn.close();
+			return result;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Integer> listaAttoriPerFilmId(int filmId){
+		String sql = "SELECT DISTINCT r.`actor_id` as id "
+				+ "FROM roles r "
+				+ "WHERE r.`movie_id`=? ";
+		List<Integer> result = new ArrayList<Integer>();
+		Connection conn = DBConnect.getConnection();
+
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, filmId);
+			ResultSet res = st.executeQuery();
+			while (res.next()) {
+				result.add(res.getInt("id"));
+			}
+			conn.close();
+			return result;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	
 	
 	
