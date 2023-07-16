@@ -62,10 +62,7 @@ public class Model {
 				}
 			}
 		}
-		
-		for(DefaultWeightedEdge e : this.graph.edgeSet()) {
-			System.out.println(this.graph.getEdgeWeight(e));
-		}
+	
 		
 		return this.graph;
 	}
